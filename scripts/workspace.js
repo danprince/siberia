@@ -2,6 +2,7 @@ import * as Document from "./document.js";
 import * as Scene from "./scene.js";
 import * as History from "./history.js";
 import * as Node from "./node.js";
+import tools from "./tools.js";
 
 /**
  * @param {Partial<App.State>} workspace
@@ -85,6 +86,23 @@ export function setCurrentGlyph(state, glyphIndex) {
  */
 export function setCurrentScene(state, sceneId) {
   return { ...state, currentSceneId: sceneId };
+}
+
+/**
+ * @param {App.State} state
+ * @param {string} toolId
+ * @return {App.Tool}
+ */
+export function getToolById(state, toolId) {
+  return tools.find(tool => tool.id === toolId);
+}
+
+/**
+ * @param {App.State} state
+ * @return {App.Tool}
+ */
+export function getCurrentTool(state) {
+  return getToolById(state, state.currentToolId);
 }
 
 /**

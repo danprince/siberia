@@ -11,7 +11,7 @@ import { useRendererEvent, useShortcut } from "./hooks.js";
 /**
  * @param {App.ToolProps} props
  */
-function BrushTool({ state, dispatch, renderer }) {
+function BrushToolRenderer({ state, dispatch, renderer }) {
   let [mirrorY, setMirrorY] = useState(false);
   let [mirrorX, setMirrorX] = useState(false);
 
@@ -106,14 +106,21 @@ function BrushTool({ state, dispatch, renderer }) {
   ]);
 }
 
-BrushTool.title = "Brush";
-BrushTool.icon = "brush";
-BrushTool.shortcut = ["b"];
+/**
+ * @type {App.Tool}
+ */
+export let BrushTool = {
+  id: "brush",
+  icon: "brush",
+  name: "Brush",
+  shortcut: ["b"],
+  renderer: BrushToolRenderer,
+};
 
 /**
  * @param {App.ToolProps} props
  */
-function EraserTool({ state, dispatch, renderer }) {
+function EraserToolRenderer({ state, dispatch, renderer }) {
   useRendererEvent(renderer, "cursor/click", event => {
     if (state.currentNodeId == null) return;
 
@@ -129,14 +136,21 @@ function EraserTool({ state, dispatch, renderer }) {
   return null;
 }
 
-EraserTool.title = "Eraser";
-EraserTool.icon = "eraser";
-EraserTool.shortcut = ["e"];
+/**
+ * @type {App.Tool}
+ */
+export let EraserTool = {
+  id: "eraser",
+  icon: "eraser",
+  name: "Eraser",
+  shortcut: ["e"],
+  renderer: EraserToolRenderer,
+}
 
 /**
  * @param {App.ToolProps} props
  */
-function EyedropperTool({ state, dispatch, renderer }) {
+function EyedropperToolRenderer({ state, dispatch, renderer }) {
   let [cell, setCell] = useState(null);
 
   useRendererEvent(renderer, "cursor/move", event => {
@@ -179,14 +193,21 @@ function EyedropperTool({ state, dispatch, renderer }) {
   ]);
 }
 
-EyedropperTool.title = "Eyedropper";
-EyedropperTool.icon = "eye";
-EyedropperTool.shortcut = ["i"];
+/**
+ * @type {App.Tool}
+ */
+export let EyedropperTool = {
+  id: "eyedropper",
+  name: "Eyedropper",
+  icon: "eyedropper",
+  shortcut: ["i"],
+  renderer: EyedropperToolRenderer
+};
 
 /**
  * @param {App.ToolProps} props
  */
-function LineTool({ state, dispatch, renderer }) {
+function LineToolRenderer({ state, dispatch, renderer }) {
   let startRef = useRef();
   let endRef = useRef();
 
@@ -228,14 +249,21 @@ function LineTool({ state, dispatch, renderer }) {
   }, [state]);
 }
 
-LineTool.title = "Line";
-LineTool.icon = "minus";
-LineTool.shortcut = ["l"];
+/**
+ * @type {App.Tool}
+ */
+export let LineTool = {
+  id: "line",
+  icon: "minus",
+  name: "Line",
+  shortcut: ["l"],
+  renderer: LineToolRenderer,
+};
 
 /**
  * @param {App.ToolProps} props
  */
-function SelectTool({ state, dispatch, renderer }) {
+function SelectToolRenderer({ state, dispatch, renderer }) {
   let startRef = useRef();
   let [selection, setSelection] = useState(null);
 
@@ -269,12 +297,12 @@ function SelectTool({ state, dispatch, renderer }) {
       setSelection(null);
 
       if (
-        startRef.current.x !== event.x &&
-        startRef.current.y !== event.y
+        startRef.current.x === event.x &&
+        startRef.current.y === event.y
       ) {
-        dispatch({ type: "workspace/set-selection", selection });
-      } else {
         dispatch({ type: "workspace/clear-selection" });
+      } else {
+        dispatch({ type: "workspace/set-selection", selection });
       }
     }
   }, [dispatch, selection, setSelection]);
@@ -314,14 +342,21 @@ function SelectTool({ state, dispatch, renderer }) {
   ]);
 }
 
-SelectTool.title = "Select";
-SelectTool.icon = "selection";
-SelectTool.shortcut = ["m"];
+/**
+ * @type {App.Tool}
+ */
+export let SelectTool = {
+  id: "select",
+  icon: "selection",
+  name: "Select",
+  shortcut: ["m"],
+  renderer: SelectToolRenderer,
+};
 
 /**
  * @param {App.ToolProps} props
  */
-function MoveTool({ state, dispatch, renderer }) {
+function MoveToolRenderer({ state, dispatch, renderer }) {
   /**
    * @type {Preact.Ref<(
    *   | { type: "none" }
@@ -389,17 +424,29 @@ function MoveTool({ state, dispatch, renderer }) {
   useRendererEvent(renderer, "cursor/up", event => {
     moveRef.current = { type: "none" };
   }, []);
+
+  return null;
 }
 
-MoveTool.title = "Move";
-MoveTool.icon = "move";
-MoveTool.shortcut = ["v"];
+/**
+ * @type {App.Tool}
+ */
+export let MoveTool = {
+  id: "move",
+  name: "Move",
+  icon: "move",
+  shortcut: ["v"],
+  renderer: MoveToolRenderer,
+};
 
-export default {
-  "brush": BrushTool,
-  "eraser": EraserTool,
-  "eyedropper": EyedropperTool,
-  "line": LineTool,
-  "select": SelectTool,
-  "move": MoveTool,
-}
+/**
+ * @type {App.Tool[]}
+ */
+export default [
+  BrushTool,
+  EraserTool,
+  EyedropperTool,
+  LineTool,
+  SelectTool,
+  MoveTool,
+]

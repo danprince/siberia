@@ -5,7 +5,7 @@ declare namespace Preact {
 
   export type Key = string | number | any;
 
-  export type VNode<Props> = {
+  export type VNode<Props = any> = {
     type: Component<Props>
     key: Key,
   } | {

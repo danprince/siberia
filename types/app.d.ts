@@ -65,12 +65,12 @@ declare namespace App {
     renderer: Renderer,
   }
 
-  export interface Tool {
-    title: string,
+  export type Tool = {
+    id: string,
+    name: string,
     icon: string,
     shortcut: string[],
-    reducer: Reducer,
-    (props: ToolProps): any
+    renderer(props: ToolProps): any,
   }
 
   export type Shortcut = {

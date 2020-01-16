@@ -1,4 +1,3 @@
-// @ts-ignore
 import { h, Fragment, useReducer, useRef, useEffect } from "./modules/preact.js";
 import reducer from "./reducer.js";
 import tools from "./tools.js";
@@ -102,12 +101,10 @@ export function Editor() {
      */
     let shortcuts = [];
 
-    for (let id in tools) {
-      let tool = tools[id];
-
+    for (let tool of tools) {
       if (tool.shortcut) {
         let shortcut = Shortcuts.on(tool.shortcut, () => {
-          dispatch({ type: "workspace/select-tool", toolId: id });
+          dispatch({ type: "workspace/select-tool", toolId: tool.id });
         });
 
         shortcuts.push(shortcut);
@@ -133,11 +130,11 @@ export function Editor() {
     return () => Shortcuts.off(shortcut);
   }, [dispatch, selection]);
 
-  let currentTool = tools[state.currentToolId];
+  let currentTool = Workspace.getCurrentTool(state);
 
   return (
     h(AppContainer, {}, [
-      h(currentTool, {
+      h(currentTool.renderer, {
         renderer: rendererRef.current,
         state,
         dispatch,
@@ -438,15 +435,13 @@ export function Canvas({
  * @param {{ state: App.State, dispatch: App.Dispatch }} props
  */
 function ToolMenus({ state, dispatch }) {
-  return h(Fragment, {}, Object.keys(tools).map(id => {
-    let tool = tools[id];
-
-    return h(TooltipTrigger, { tip: tool.title }, [
+  return h(Fragment, {}, tools.map(tool => {
+    return h(TooltipTrigger, { tip: tool.name }, [
       h(ToolbarItem, {
-        selected: id === state.currentToolId,
+        selected: tool.id === state.currentToolId,
         onClick() {
-          if (state.currentToolId !== id) {
-            dispatch({ type: "workspace/select-tool", toolId: id });
+          if (state.currentToolId !== tool.id) {
+            dispatch({ type: "workspace/select-tool", toolId: tool.id });
           }
         }
       }, (

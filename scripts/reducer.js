@@ -260,24 +260,6 @@ function HistoryReducer(state, action) {
   }
 }
 
-/**
- * @param {App.State} state
- * @param {App.Action} action
- * @return {App.State}
- */
-function ToolReducer(state, action) {
-  /**
-   * @type {App.Tool}
-   */
-  let currentTool = Tools[state.currentToolId];
-
-  if (currentTool && currentTool.reducer) {
-    state = currentTool.reducer(state, action);
-  }
-
-  return state;
-}
-
 let DomainReducers = combineReducers({
   doc: DocumentReducer,
 });
@@ -290,7 +272,6 @@ let DomainReducers = combineReducers({
 function appReducer(state, action) {
   state = WorkspaceReducer(state, action);
   state = DomainReducers(state, action);
-  state = ToolReducer(state, action);
   state = HistoryReducer(state, action);
   return state;
 }
