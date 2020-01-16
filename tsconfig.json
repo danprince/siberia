@@ -5,14 +5,7 @@
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,
-    "noImplicitAny": false,
-    "baseUrl": ".",
-    "paths": {
-      "/lib/*.js": [
-        "types/modules/*",
-        "scripts/modules/*js",
-      ]
-    }
+    "noImplicitAny": false
   },
   "include": [
     "**/*.d.ts",
