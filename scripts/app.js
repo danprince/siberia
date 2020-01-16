@@ -569,6 +569,8 @@ function NodeExplorerPanel({ state, dispatch }) {
           h(SelectableList, {}, (
             currentScene ? currentScene.nodes : []
           ).map(node => {
+            let locked = Workspace.isNodeLocked(state, node.id);
+
             return h(NodeExplorerItem, {
               id: `node-${node.id}`,
               key: node.id,
@@ -588,14 +590,13 @@ function NodeExplorerPanel({ state, dispatch }) {
               }),
               h(IconToggle, {
                 name: "lock",
-                value: node.visible,
+                value: locked,
                 onClick(event) {
-                  //dispatch({
-                  //  type: "node/set-locked",
-                  //  sceneId: currentScene.id,
-                  //  nodeId: node.id,
-                  //  locked: !node.locked,
-                  //});
+                  dispatch({
+                    type: "workspace/set-node-locked",
+                    nodeId: node.id,
+                    locked: !locked,
+                  });
                 }
               }),
               h(SelectableListItem, {

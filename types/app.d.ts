@@ -9,6 +9,7 @@ declare namespace App {
     currentColor: number,
     cursor: { x: number, y: number }
     selection: { x0: number, y0: number, x1: number, y1: number }
+    lockedNodes: string[],
   };
 
   export type Action =
@@ -21,6 +22,7 @@ declare namespace App {
     | { type: "workspace/select-node", nodeId: string }
     | { type: "workspace/set-cursor", x: number, y: number }
     | { type: "workspace/set-selection", selection: Selection }
+    | { type: "workspace/set-node-locked", nodeId: string, locked: boolean }
     | { type: "workspace/clear-selection" }
     | { type: "document/set-name", name: string }
     | { type: "document/set-font", family: string, size: number }

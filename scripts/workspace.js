@@ -29,6 +29,7 @@ export function create(workspace = {}) {
     currentToolId: "brush",
     cursor: { x: null, y: null },
     selection: null,
+    lockedNodes: [],
   };
 }
 
@@ -250,4 +251,28 @@ export function getCurrentNode(state) {
     state.currentSceneId,
     state.currentNodeId,
   );
+}
+
+/**
+ * @param {App.State} state
+ * @param {string} nodeId
+ * @param {boolean} locked
+ * @return {App.State}
+ */
+export function setNodeLocked(state, nodeId, locked) {
+  return {
+    ...state,
+    lockedNodes: locked
+      ? [...state.lockedNodes, nodeId]
+      : state.lockedNodes.filter(lockId => lockId !== nodeId)
+  };
+}
+
+/**
+ * @param {App.State} state
+ * @param {string} nodeId
+ * @return {boolean}
+ */
+export function isNodeLocked(state, nodeId) {
+  return state.lockedNodes.includes(nodeId);
 }

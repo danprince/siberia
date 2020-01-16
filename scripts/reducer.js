@@ -83,6 +83,10 @@ function WorkspaceReducer(state, action) {
       }
     }
 
+    case "workspace/set-node-locked": {
+      return Workspace.setNodeLocked(state, action.nodeId, action.locked);
+    }
+
     default:
       return state;
   }
