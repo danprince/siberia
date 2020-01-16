@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "paths": {
+      "/lib/*.js": [
+        "types/modules/*",
+        "scripts/modules/*js",
+      ]
+    }
+  },
+  "include": [
+    "**/*.d.ts",
+    "**/*.js"
+  ],
+  "exclude": [
+    "lib"
+  ]
+}

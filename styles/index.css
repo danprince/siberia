@@ -1,0 +1,67 @@
+@import "./components.css";
+
+:root {
+  --darker: rgba(0, 0, 0, 0.1);
+  --darker-1: rgba(0, 0, 0, 0.1);
+  --darker-2: rgba(0, 0, 0, 0.2);
+  --darker-3: rgba(0, 0, 0, 0.3);
+  --darker-4: rgba(0, 0, 0, 0.4);
+  --darker-5: rgba(0, 0, 0, 0.5);
+  --lighter: rgba(255, 255, 255, 0.1);
+
+  --lighter-grey: #8794a5;
+  --light-grey: #4c545e;
+  --grey: #30363e;
+  --dark-grey: #282c33;
+  --darker-grey: #1e2126;
+  --black: #0a0b0c;
+  --white: #f8fbff;
+  --dark-white: #eaedf1;
+  --darker-white: #c9d1de;
+
+  --overlay-z-index: 20;
+  --toolbar-z-index: 10;
+  --sidebar-z-index: 5;
+
+  --toolbar-height: 32px;
+
+  /* Default dark theme */
+
+  --app-font: 10pt system-ui;
+  --app-text-color: var(--white);
+  --app-background: var(--darker-grey);
+  --button-background: var(--light-grey);
+  --button-border-color: var(--dark-grey);
+  --placeholder-color: var(--lighter-grey);
+  --app-sidebar-background: var(--grey);
+  --toolbar-background: var(--grey);
+  --toolbar-button-hover-background: var(--dark-grey);
+  --toolbar-divider-color: var(--dark-grey);
+  --toolbar-item-selected-background: var(--dark-grey);
+  --sidebar-panel-header-background: var(--dark-grey);
+  --selectable-list-item-color: var(--lighter-grey);
+  --selectable-list-selected-item-color: var(--white);
+  --selectable-list-selected-background: var(--dark-grey);
+  --panel-background: var(--grey);
+  --palette-background: var(--dark-grey);
+  --palette-swatch-selected-border-color: var(--white);
+  --context-menu-background: var(--grey);
+  --context-menu-border-color: var(--dark-grey);
+  --context-menu-item-selected-background: var(--dark-grey);
+  --window-background: var(--grey);
+  --window-title-bar-background: var(--dark-grey);
+  --input-background: var(--dark-grey);
+  --tooltip-background: var(--black);
+}
+
+body {
+  background: var(--app-background);
+  font: var(--app-font);
+  color: var(--app-text-color);
+  user-select: none;
+}
+
+input::placeholder {
+  color: var(--placeholder-color);
+  opacity: 0.5;
+}
