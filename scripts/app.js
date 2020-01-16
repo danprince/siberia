@@ -56,14 +56,9 @@ import {
 let initialState = Workspace.create();
 
 export function Editor() {
-  /**
-   * @type {[App.State, App.Dispatch]}
-   */
   let [state, dispatch] = useReducer(reducer, initialState);
 
   let rendererRef = useRef(Renderer.create());
-
-  let currentTool = tools[state.currentToolId];
 
   useEffect(() => {
     let state = Workspace.load();
@@ -129,13 +124,16 @@ export function Editor() {
   let selection = Workspace.getSelection(state);
 
   useEffect(() => {
-    if (selection) {
-      return Shortcuts.on(["Escape"], () => {
-        dispatch({ type: "workspace/clear-selection" });
-      });
-    }
+    if (selection == null) return;
+
+    let shortcut = Shortcuts.on(["Escape"], () => {
+      dispatch({ type: "workspace/clear-selection" });
+    });
+
+    return () => Shortcuts.off(shortcut);
   }, [dispatch, selection]);
 
+  let currentTool = tools[state.currentToolId];
 
   return (
     h(AppContainer, {}, [
@@ -149,7 +147,7 @@ export function Editor() {
         h(ToolbarDivider),
         h(ToolMenus, { state, dispatch }),
         h(ToolbarDivider),
-        h(Slot, { id: "tool-options" }),
+        h(Slot, { name: "tool-options" }),
         h(ToolbarDivider),
       ]),
       h(AppView, {}, [
@@ -597,12 +595,12 @@ function NodeExplorerPanel({ state, dispatch }) {
                 name: "lock",
                 value: node.visible,
                 onClick(event) {
-                  dispatch({
-                    type: "node/set-locked",
-                    sceneId: currentScene.id,
-                    nodeId: node.id,
-                    locked: !node.locked,
-                  });
+                  //dispatch({
+                  //  type: "node/set-locked",
+                  //  sceneId: currentScene.id,
+                  //  nodeId: node.id,
+                  //  locked: !node.locked,
+                  //});
                 }
               }),
               h(SelectableListItem, {

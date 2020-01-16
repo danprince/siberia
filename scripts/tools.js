@@ -1,4 +1,3 @@
-// @ts-ignore
 import { h, Fragment, useState, useRef } from "./modules/preact.js";
 import { Fill, ToolbarItem, ToolbarDivider, GlyphSwatch, ColorSwatch } from "./components.js";
 import { reflect } from "./utils.js";
@@ -90,7 +89,7 @@ function BrushTool({ state, dispatch, renderer }) {
   }, [state]);
 
   return h(Fragment, {}, [
-    h(Fill, { id: "tool-options" }, [
+    h(Fill, { name: "tool-options" }, [
       h(ToolbarItem, {
         selected: mirrorX,
         onClick: () => setMirrorX(!mirrorX),
@@ -323,6 +322,13 @@ SelectTool.shortcut = ["m"];
  * @param {App.ToolProps} props
  */
 function MoveTool({ state, dispatch, renderer }) {
+  /**
+   * @type {Preact.Ref<(
+   *   | { type: "none" }
+   *   | { type: "selection", target: App.Selection, start: { x: number, y: number } }
+   *   | { type: "node", target: Editor.Node, start: { x: number, y: number } }
+   * )>}
+   */
   let moveRef = useRef({ type: "none" });
 
   useRendererEvent(renderer, "cursor/down", event => {
@@ -348,10 +354,12 @@ function MoveTool({ state, dispatch, renderer }) {
   }, [state]);
 
   useRendererEvent(renderer, "cursor/move", event => {
-    let { type, target, start } = moveRef.current;
+    let { type } = moveRef.current;
 
-    switch (type) {
+    switch (moveRef.current.type) {
       case "selection": {
+        let { target, start } = moveRef.current;
+
         let selection = Selection.translate(
           target,
           event.x - start.x,
@@ -365,6 +373,8 @@ function MoveTool({ state, dispatch, renderer }) {
       }
 
       case "node": {
+        let { target, start } = moveRef.current;
+
         return dispatch({
           type: "node/set-translation",
           sceneId: state.currentSceneId,

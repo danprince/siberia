@@ -1,4 +1,3 @@
-// @ts-ignore
 import { h, render, createContext, useReducer, useState, useRef, useEffect, useContext } from "./modules/preact.js";
 import { classes } from "./utils.js";
 import Icons from "./icons.js";
@@ -668,7 +667,20 @@ export function ScrollView({ height, minHeight, maxHeight, children, ...props })
 
 // --- Slot and Fill ---
 
-let SlotAndFillContext = createContext({});
+/**
+ * @type {Preact.Context<{
+ *   mount(name: string, children: Preact.ComponentChildren): void,
+ *   unmount(name: string): void,
+ *   subscribe(callback: (slots: any) => void): void,
+ *   unsubscribe(callback: (slots: any) => void): void,
+ * }>}
+ */
+let SlotAndFillContext = createContext({
+  mount() {},
+  unmount() {},
+  subscribe() {},
+  unsubscribe() {},
+});
 
 export function SlotAndFillProvider({ children }) {
   // It might seem awkward but the distinction between using a ref and

@@ -13,9 +13,11 @@ export function classes(object) {
 }
 
 /**
- * @template T
- * @param {((t: T) => T)[]} fns
- * @return {(t: T) => T}
+ * @param {((x: any) => any)[]} fns
+ * @return {(x: any) => any}
+ *
+ * Doesn't seem possible to get a sane type for this with JSDoc and
+ * ambient type files.
  */
 export function compose(...fns) {
   return val => fns.reduce((val, fn) => fn(val), val);

@@ -300,4 +300,9 @@ let enhance = compose(
   withBatchReducer,
 );
 
-export default enhance(appReducer);
+/**
+ * @type {App.Reducer}
+ */
+let reducer = enhance(appReducer);
+
+export default reducer;
