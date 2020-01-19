@@ -189,3 +189,44 @@ export function reflect(
 
   return [{ x, y }];
 }
+
+/**
+ * @param {number} x0
+ * @param {number} y0
+ * @param {number} x1
+ * @param {number} y1
+ * @return {Generator<[number, number]>}
+ */
+export function* bresenham(x0, y0, x1, y1) {
+  var dx = x1 - x0;
+  var dy = y1 - y0;
+  var adx = Math.abs(dx);
+  var ady = Math.abs(dy);
+  var eps = 0;
+  var sx = Math.sign(dx);
+  var sy = Math.sign(dy);
+
+  if(adx > ady) {
+    for (var x = x0, y = y0; sx < 0 ? x >= x1 : x <= x1; x += sx) {
+      yield [x, y];
+
+      eps += ady;
+
+      if ((eps<<1) >= adx) {
+        y += sy;
+        eps -= adx;
+      }
+    }
+  } else {
+    for (var x = x0, y = y0; sy < 0 ? y >= y1 : y <= y1; y += sy) {
+      yield [x, y];
+
+      eps += adx;
+
+      if ((eps<<1) >= ady) {
+        x += sx;
+        eps -= ady;
+      }
+    }
+  }
+}

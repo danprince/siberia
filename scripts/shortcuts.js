@@ -133,3 +133,7 @@ export function once(keys, callback) {
     off(shortcut);
   });
 }
+
+export function isKeyDown(key) {
+  return activeKeys.has(key);
+}

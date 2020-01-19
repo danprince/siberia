@@ -1,11 +1,12 @@
 import { h, Fragment, useState, useRef } from "./modules/preact.js";
 import { Fill, ToolbarItem, ToolbarDivider, GlyphSwatch, ColorSwatch } from "./components.js";
-import { reflect } from "./utils.js";
+import { reflect, bresenham } from "./utils.js";
 import * as Document from "./document.js";
 import * as Node from "./node.js";
 import * as Workspace from "./workspace.js";
 import * as Renderer from "./renderer.js";
 import * as Selection from "./selection.js";
+import { isKeyDown } from "./shortcuts.js";
 import { useRendererEvent, useShortcut } from "./hooks.js";
 
 /**
@@ -14,10 +15,13 @@ import { useRendererEvent, useShortcut } from "./hooks.js";
 function BrushToolRenderer({ state, dispatch, renderer }) {
   let [mirrorY, setMirrorY] = useState(false);
   let [mirrorX, setMirrorX] = useState(false);
+  let previousClickRef = useRef();
 
-  useRendererEvent(renderer, "cursor/click", event => {
-    if (state.currentNodeId == null) return;
-
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
+  function drawSinglePoint(x, y) {
     let node = Document.getNodeById(
       state.doc,
       state.currentSceneId,
@@ -29,8 +33,8 @@ function BrushToolRenderer({ state, dispatch, renderer }) {
       : Node.getCenter(node);
 
     let points = reflect(
-      event.x,
-      event.y,
+      x,
+      y,
       center.x,
       center.y,
       mirrorX,
@@ -53,6 +57,47 @@ function BrushToolRenderer({ state, dispatch, renderer }) {
     });
 
     return dispatch(actions);
+  }
+
+  /**
+   * @param {number} x0
+   * @param {number} y0
+   * @param {number} x1
+   * @param {number} y1
+   */
+  function drawLineBetween(x0, y0, x1, y1) {
+    /**
+      * @type {App.Action[]}
+      */
+    let actions = [];
+
+    for (let [x, y] of bresenham(x0, y0, x1, y1)) {
+      actions.push({
+        type: "node/set-cell",
+        sceneId: state.currentSceneId,
+        nodeId: state.currentNodeId,
+        color: state.currentColor,
+        glyph: state.currentGlyph,
+        x,
+        y,
+      });
+    }
+
+    return dispatch(actions);
+  }
+
+  useRendererEvent(renderer, "cursor/click", event => {
+    if (state.currentNodeId == null) return;
+
+    if (isKeyDown("Shift") && previousClickRef.current) {
+      let { x: x0, y: y0 } = previousClickRef.current;
+      let { x: x1, y: y1 } = event;
+      drawLineBetween(x0, y0, x1, y1);
+    } else {
+      drawSinglePoint(event.x, event.y);
+    }
+
+    previousClickRef.current = { x: event.x, y: event.y };
   }, [state, dispatch]);
 
   useRendererEvent(renderer, "after-cells", event => {
