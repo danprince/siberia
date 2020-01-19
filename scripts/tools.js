@@ -368,7 +368,13 @@ function MoveToolRenderer({ state, dispatch, renderer }) {
 
   useRendererEvent(renderer, "cursor/down", event => {
     let selection = Workspace.getSelection(state);
-    let node = Workspace.getCurrentNode(state);
+
+    let node = Document.getNodeAt(
+      state.doc,
+      state.currentSceneId,
+      event.x,
+      event.y,
+    );
 
     if (selection && Selection.containsPoint(selection, event.x, event.y)) {
       moveRef.current = {
@@ -377,6 +383,8 @@ function MoveToolRenderer({ state, dispatch, renderer }) {
         start: { x: event.x, y: event.y }
       };
     } else if (node) {
+      dispatch({ type: "workspace/select-node", nodeId: node.id })
+
       moveRef.current = {
         type: "node",
         target: node,

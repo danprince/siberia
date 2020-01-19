@@ -1,5 +1,6 @@
 import { uid } from "./utils.js";
 import * as Scene from "./scene.js";
+import * as Node from "./node.js";
 
 /**
  * @param {Partial<Editor.Doc>} doc
@@ -254,4 +255,25 @@ export function setGlyph(doc, index, glyph) {
   let glyphs = [...doc.glyphs];
   glyphs[index] = glyph;
   return { ...doc, glyphs };
+}
+
+/**
+ * @param {Editor.Doc} doc
+ * @param {string} sceneId
+ * @param {number} x
+ * @param {number} y
+ * @return {Editor.Node}
+ */
+export function getNodeAt(doc, sceneId, x, y) {
+  let scene = getSceneById(doc, sceneId);
+
+  if (scene == null) {
+    return null;
+  }
+
+  return scene.nodes.find(node => {
+    let tx = x - node.translate.x;
+    let ty = y - node.translate.y;
+    return Node.getCell(node, tx, ty) != null;
+  });
 }
