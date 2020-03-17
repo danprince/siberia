@@ -1,17 +1,28 @@
-# TODO
+# Siberia
+ASCII image editor built on the Trans-Siberian railway. Don't know if I'll ever continue with this project, but it's a good example of a moderately complex typed web app that "just works" in the browser without any tools (no bundlers, compilers etc).
 
-## Feasts
+![Imgur](https://i.imgur.com/kqdFskP.png)
+
+## Features
+* Hierarchy: Document > Scenes > Nodes
+* Undo history
+* Indexed glyphs/colors
+* Persistence
+
+## Roadmap
+### Big
 - [ ] Animation
 - [ ] Node libraries
 - [ ] Copy and paste
+- [ ] Grouping
 
-## Meals
+### Medium
 - [ ] Exports
 - [ ] Selection
 - [ ] Save + load
 - [ ] Router support
 - [ ] Node cloning
-- [x] Move tool
+- [ ] Move tool
 - [ ] Color picker
 - [ ] Shape tool
 - [ ] Brush picker
@@ -19,15 +30,20 @@
 - [ ] Palette library
 - [ ] Contextual actions (flip node, etc)
 - [ ] Node format / cell index
+- [ ] Shift click line drawing
+- [ ] Selecting multiple layers
+- [ ] Layer flattening
 
-## Snacks
+### Small
 - [ ] Fill
 - [ ] Toast notifications
 - [ ] Prompts
 - [ ] Design a better default palette
 - [ ] Node locking
+- [ ] Allow the cursor to move out of the canvas
+- [ ] After creating a selection, move content inside selection on current node into a temporary node.
 
-## Blemishes
+### Blemishes
 - [ ] Dropdown menus glitch
 - [ ] Tooltip alignment
 - [ ] Sidebar can grow beyond page
@@ -36,13 +52,12 @@
 - [ ] Revision styles
 - [x] Triangle on glyph palette
 
-## Bugs
+### Bugs
 - [ ] Eyedropper picks the first cell (not the top cell)
 - [ ] Eyedropper is node specific
 - [ ] Symmetry is broken if node is translated
+- [ ] Move tool can't move contents of selection
 
-## Sanity
+### Sanity
 - [x] Using workspace to mean App.State and { state: App.State, dispatch: App.Dispatch }
-
-## Internet
-- [ ] Look up dropdown menus
+- [ ] Separate renderer hooks from events
